@@ -28,9 +28,9 @@
 #include <TimedAction.h>
 
 // choose an IMU board
-// #include "Sparkfun6DOF.h"
+// #include <Sparkfun6DOF.h>
 // IMUmanager imu = Sparkfun6DOF();
-#include "LSM9DS0_9DOF.h"
+#include <LSM9DS0_9DOF.h>
 LSM9DS0_9DOF imu = LSM9DS0_9DOF();
 
 // initialize the lcd with the numbers of the interface pins
