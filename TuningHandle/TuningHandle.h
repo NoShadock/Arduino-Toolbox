@@ -15,7 +15,10 @@
  *	When activated, the button state changes (UP/DOWN) are watched:
  * 	  - the variator changes change the value when the button is pushed (powered ON).
  *    - the variator changes do not affect the value when the button is at rest (powered OFF).
- *  Thus alternating ON and OFF states can be used to glide the value range until the desired value is accessible.
+ *    - when re-powered ON the range is recentered on the value: bottom stays 0, and top is
+ *		updated to fit the variator state.
+ *  Thus alternating ON and OFF states can be used to zoom in and out the window until the
+ *  desired value is in range.
  *
  *
  * Example:
@@ -30,39 +33,45 @@
  * }
  *
  */
+#include <Arduino.h>
 
 class TuningHandle {
 
 	private:
+		static void update();
+		static TuningHandle* singleton;
+
 		int _pin_variator;
 		int _pin_push_button;
 
+		bool _init = true;
 		bool _activated;
-		char _push_button_state;
-		char _push_button_state_on;
+		volatile byte _push_button_state;
+		byte _push_button_state_on;
 
 		float _value_start;
-		float _value_min;
-		float _value_max;
-		float _value;
+		volatile const float _value_min = 0.0f;
+		volatile float _value_max;
+		volatile float _value = 0.0f;
 
-		float _analog_max = 1023.0f;
+		float _analog_max = 1024.0f;
 		void updateValue();
 		void updateRange();
 		void updateState();
 		float readRatio();
+		TuningHandle(int pin_variator, int pin_push_button, float start_max_value, byte state_on=HIGH);
 
 	public:
-		TuningHandle(int pin_variator, int pin_push_button, float start_value, char state_on=HIGH);
+		static TuningHandle* createInstance(int pin_variator, int pin_push_button, float start_max_value, byte state_on=HIGH);
+		static TuningHandle* getInstance();
 		void activate();
 		void deactivate();
-		void setStateOn(char state);
+		void setStateOn(byte state);
 		void resetValue();
 		float getValue();
 		float getMin();
 		float getMax();
 		bool isActivated();
 		bool isOn();
-
-}
+};
 

@@ -28,7 +28,8 @@
 #include "TuningHandle.h"
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
-TuningHandle th(PIN_Variator, PIN_PushButton, 4, HIGH);
+TuningHandle* th = TuningHandle::createInstance(PIN_Variator, PIN_PushButton, 4, LOW);
+float v=-1.0, mx=-1.0, mn=-1.0;
 
 void setup()
 {
@@ -37,20 +38,35 @@ void setup()
   // Print a message to the LCD.
   lcd.setCursor(0, 0);
   lcd.print("I am Handle !");
+
+  Serial.begin(9600);
+  
   delay(1000);
-  th.activate();
+  Serial.println("Setup 1-step to done.");
+  th->activate();
+
+  Serial.print("Setup ");
+  printState(th);
+  Serial.println();
+  Serial.println("Setup done.");
 }
 
 void loop()
 {
-  printVal()
-  delay(100);
+  Serial.println("Loop1 Button="+String(digitalRead(PIN_PushButton))+" Vario="+analogRead(PIN_Variator));
+
+  Serial.print("Loop2 ");
+  printState(th);
+  Serial.println();
+  delay(1000);
 }
 
-void printVal(float v, float vmax, float vmin)
+void printState(TuningHandle* th)
 {
+   Serial.println("["+String(th->getMin())+", "+String(th->getValue())+", "+String(th->getMax())+
+    "] - act="+String(th->isActivated())+", on="+String(th->isOn()));
   lcd.setCursor(0, 0);
-  lcd.print("Min: " + String(vmin, 2) + " Max: " + String(vmax, 2));
+  lcd.print(String(th->getMin(), 0) + "        " + String(th->getMax(), 3));
   lcd.setCursor(0, 1);
-  lcd.print("Val= " + String(v));
+  lcd.print("Val=  " + String(th->getValue(), 4));
 }

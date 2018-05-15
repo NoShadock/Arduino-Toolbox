@@ -1,0 +1,30 @@
+#include <Arduino.h>
+#include <util/atomic.h>
+
+#define PIN_Variator 0
+#define PIN_Switch 11
+#define PIN_Switch2 12
+#define PIN_PushButton 2
+
+int ctr = 0;
+
+void inc(){
+	ctr++;
+}
+
+void setup(){
+	Serial.begin(9600);
+	pinMode(PIN_PushButton, INPUT_PULLUP);
+	attachInterrupt(digitalPinToInterrupt(PIN_PushButton), inc, CHANGE);
+}
+
+void loop(){
+	int ctr_copy;
+	ATOMIC_BLOCK(ATOMIC_FORCEON)
+	{
+		ctr_copy = ctr;
+	}
+	Serial.println(ctr_copy);
+	delay(500);
+}
+
