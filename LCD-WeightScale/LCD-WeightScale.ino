@@ -1,18 +1,8 @@
 /*
  * The circuit:
- * 
- * LCD VSS to ground
- * LCD VDD to 5V
+ * LCD: [VSS, VDD, V0, RS,   R, E, D4, D5, D6, D7,    A,    K ]
+ *      [GND, 5V,  1V,  9, GND, 8,  7,  6,  5,  4, 3.3V,  GND ]
  * LCD V0 to ground via 1-10k resistor (contrast)
- * LCD RS pin to digital pin 7
- * LCD R/W pin to ground
- * LCD Enable pin to digital pin 6
- * LCD D4 pin to digital pin 5
- * LCD D5 pin to digital pin 4
- * LCD D6 pin to digital pin 3
- * LCD D7 pin to digital pin 2
- * LCD A to 3.3V (medium high brightness)
- * LCD K to ground
  *
  * HX711 GND to ground
  * HX711 DouT to digital pin 10
@@ -29,7 +19,7 @@
 #define NB_ECHANTILLON 5
 
 // initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
+LiquidCrystal lcd(9,8,7,6,5,4);
 HX711 scale(10, 11); // HX711.DOUT = GPIO10 / HX711.PD_SCK = GPIO11
 
 unsigned int index_moyenne=0;
