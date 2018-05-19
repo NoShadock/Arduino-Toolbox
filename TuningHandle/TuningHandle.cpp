@@ -104,9 +104,15 @@ void TuningHandle::setStateOn(byte state){
 }
 
 // Reset the value to the start value
-void TuningHandle::resetValue(){
+void TuningHandle::reset(){
 	_value_max = _value_start;
 	_init = true;
+}
+
+// Set the value
+void TuningHandle::setValue(float v){
+	_value = v;
+	updateRange();
 }
 
 // Get the latest value

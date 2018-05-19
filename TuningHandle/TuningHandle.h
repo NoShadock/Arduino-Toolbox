@@ -67,7 +67,8 @@ class TuningHandle {
 		void activate();
 		void deactivate();
 		void setStateOn(byte state);
-		void resetValue();
+		void reset();
+		void setValue(float);
 		float getValue();
 		float getMin();
 		float getMax();
